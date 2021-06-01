@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import com.xadmin.coursemanagement.bean.Course;
 import com.xadmin.coursemanagement.dao.courseDAO;
 
@@ -24,10 +25,10 @@ import com.xadmin.coursemanagement.dao.courseDAO;
 @WebServlet("/")
 public class CourseServelet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private CourseDAO userDAO;
+	private courseDAO courseDAO;
 	
-	public void init() {
-		userDAO = new CourseDAO();
+	public void init()  {
+		//courseDAO = new courseDAO();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -44,20 +45,20 @@ public class CourseServelet extends HttpServlet {
 			case "/new":
 				showNewForm(request, response);
 				break;
-			case "/insert":
-				insertUser(request, response);
-				break;
+			//case "/insert":
+				//insertCourse(request, response);
+			//	break;
 			case "/delete":
-				deleteUser(request, response);
+				deleteCourse(request, response);
 				break;
 			case "/edit":
 				showEditForm(request, response);
 				break;
 			case "/update":
-				updateUser(request, response);
+				updateCourse(request, response);
 				break;
 			default:
-				listUser(request, response);
+				listCourse(request, response);
 				break;
 			}
 		} catch (SQLException ex) {
@@ -69,52 +70,50 @@ public class CourseServelet extends HttpServlet {
 			throws SQLException, IOException, ServletException {
 		List<Course> listCourse = courseDAO.selectAllCourses();
 		request.setAttribute("listCourse", listCourse);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("user-list.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("course-list.jsp");
 		dispatcher.forward(request, response);
 	}
 
 	private void showNewForm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("course-form.jsp");
 		dispatcher.forward(request, response);
 	}
 
 	private void showEditForm(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
 		int id = Integer.parseInt(request.getParameter("id"));
-		Course existingUser = courseDAO.selectCourse(id);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
-		request.setAttribute("user", existingUser);
+		Course existingCourse = courseDAO.selectCourse(id);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("course-form.jsp");
+		request.setAttribute("course", existingCourse);
 		dispatcher.forward(request, response);
 
 	}
 
-	private void insertUser(HttpServletRequest request, HttpServletResponse response) 
+	//private void insertCourse(HttpServletRequest request, HttpServletResponse response) 
+	//throws SQLException, IOException {
+		//String code = request.getParameter("code");
+	//String title = request.getParameter("title");
+	//Course newCourse = new Course(code, title);
+		//courseDAO.insertCourse(newCourse);
+		//response.sendRedirect("list");//
+	//}//
+
+	private void updateCourse(HttpServletRequest request, HttpServletResponse response) 
 			throws SQLException, IOException {
-		String name = request.getParameter("name");
-		String email = request.getParameter("email");
-		String country = request.getParameter("country");
-		User newUser = new User(name, email, country);
-		userDAO.insertUser(newUser);
+		int id = Integer.parseInt(request.getParameter("id"));
+		String code = request.getParameter("code");
+		String title = request.getParameter("title");
+
+		Course cour = new Course(id, code, title);
+		courseDAO.updateCourse(cour);
 		response.sendRedirect("list");
 	}
 
-	private void updateUser(HttpServletRequest request, HttpServletResponse response) 
+	private void deleteCourse(HttpServletRequest request, HttpServletResponse response) 
 			throws SQLException, IOException {
 		int id = Integer.parseInt(request.getParameter("id"));
-		String name = request.getParameter("name");
-		String email = request.getParameter("email");
-		String country = request.getParameter("country");
-
-		User book = new User(id, name, email, country);
-		userDAO.updateUser(book);
-		response.sendRedirect("list");
-	}
-
-	private void deleteUser(HttpServletRequest request, HttpServletResponse response) 
-			throws SQLException, IOException {
-		int id = Integer.parseInt(request.getParameter("id"));
-		userDAO.deleteUser(id);
+		courseDAO.deleteCourse(id);
 		response.sendRedirect("list");
 
 	}

@@ -49,7 +49,7 @@ public class courseDAO {
 	}
 
 
-	public void insertCourse(Course course) throws SQLException {
+	public static void insertCourse(Course course) throws SQLException {
 		System.out.println(INSERT_COURSES_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
@@ -131,7 +131,7 @@ public class courseDAO {
 		return courses;
 	}
 
-	public boolean deleteCourses(int id) throws SQLException {
+	public boolean deleteCourse(int id) throws SQLException {
 		boolean rowDeleted;
 		try (Connection connection = getConnection();
 				PreparedStatement statement = connection.prepareStatement(DELETE_COURSES_SQL);) {

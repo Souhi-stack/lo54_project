@@ -5,10 +5,10 @@ public class Course {
 	private int id ; 
 	
 	
-	public Course(int id, String code2, String title) {
+	public Course(int id, String code, String title) {
 		super();
 		this.id = id;
-		this.code = code2;
+		this.code = code;
 		this.title = title;
 	}
 	public int getId() {
